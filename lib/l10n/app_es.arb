@@ -1,0 +1,12 @@
+{
+    "accept": "aceptar",
+    "dontHaveAnAccount": "¿No posee una cuenta?",
+    "email": "correo electrónico",
+    "forgotPassword": "olvidé mi contraseña",
+    "invalidEmail": "correo electrónico inválido",
+    "login": "acceder",
+    "register": "registrarse",
+    "required": "requerido",
+    "rememberMe": "recuerdame",
+    "password": "contraseña"
+}

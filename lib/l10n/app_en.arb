@@ -1,0 +1,42 @@
+{
+   "accept": "accept",
+    "@accept": {
+      "description": "accept message"
+    },
+    "dontHaveAnAccount":"don't have an account?",
+    "@dontHaveAnAccount":{
+      "description": "don't have an account message"
+    },
+    "email": "email",
+    "@email": {
+      "description": "email address"
+    },
+    "forgotPassword": "forgot password",
+    "@forgotPassword":{
+      "description": "forgot password link message"
+    },
+    "invalidEmail": "invalid email",
+    "@invalidEmail":{
+      "description": "invalid email message"
+    },
+    "login": "log in",
+    "@login": {
+      "description": "login"
+    },
+    "register": "register",
+    "@register": {
+      "description": "register"
+    },
+    "rememberMe": "remember me",
+    "@rememberMe":{
+      "description": "remember me message"
+    },
+    "required": "required",
+    "@required": {
+      "description": "required input"
+    },
+    "password": "password",
+    "@password": {
+       "description": "user password"
+    }
+}
