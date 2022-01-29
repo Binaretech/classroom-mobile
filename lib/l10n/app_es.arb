@@ -1,5 +1,6 @@
 {
     "accept": "aceptar",
+    "createAccount": "Crear cuenta",
     "dontHaveAnAccount": "¿No posee una cuenta?",
     "email": "correo electrónico",
     "forgotPassword": "olvidé mi contraseña",

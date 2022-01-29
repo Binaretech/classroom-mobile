@@ -3,6 +3,10 @@
     "@accept": {
       "description": "accept message"
     },
+    "createAccount": "Crear cuenta",
+    "@createAccount": {
+      "description":"Create account"
+    },
     "dontHaveAnAccount":"don't have an account?",
     "@dontHaveAnAccount":{
       "description": "don't have an account message"
