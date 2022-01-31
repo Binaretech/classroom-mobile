@@ -19,6 +19,10 @@
     "@forgotPassword":{
       "description": "forgot password link message"
     },
+    "haveAnAccount": "Already have an account?",
+    "@haveAnAccount": {
+      "description": "question to go to login"
+    },
     "invalidEmail": "invalid email",
     "@invalidEmail":{
       "description": "invalid email message"

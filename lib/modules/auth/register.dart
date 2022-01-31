@@ -1,4 +1,5 @@
-import 'package:classroom_mobile/http/service.dart';
+import 'package:classroom_mobile/repository/auth_repository.dart';
+import 'package:classroom_mobile/router/router_page_manager.dart';
 import 'package:classroom_mobile/utils/validation.dart';
 import 'package:flutter/material.dart';
 import 'package:classroom_mobile/modules/auth/widgets/auth_title.dart';
@@ -6,7 +7,7 @@ import 'package:classroom_mobile/widgets/password_input.dart';
 import 'package:intl/intl.dart';
 import 'package:classroom_mobile/l10n/localization.dart';
 
-class RegisterData {
+class LoginData {
   String? email;
   String? password;
 }
@@ -20,17 +21,32 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
   final _formKey = GlobalKey<FormState>();
-  final RegisterData _loginData = RegisterData();
+  final LoginData _loginData = LoginData();
 
   bool remember = false;
+
+  bool isLoading = false;
 
   submit() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
-      login(_loginData.email ?? '', _loginData.password ?? '')
-          .then((value) => print(value))
-          .catchError((error) => print(error));
+      setState(() {
+        isLoading = true;
+      });
+
+      register(
+        email: _loginData.email ?? '',
+        password: _loginData.password ?? '',
+      ).then((response) {
+        setState(() {
+          isLoading = false;
+        });
+      }).catchError((_) {
+        setState(() {
+          isLoading = false;
+        });
+      });
     }
   }
 
@@ -38,6 +54,10 @@ class _RegisterState extends State<Register> {
     setState(() {
       remember = value ?? false;
     });
+  }
+
+  void login(BuildContext context) {
+    RouterPageManager.of(context).push('/login');
   }
 
   Widget inputs(AppLocalizations localization) {
@@ -73,29 +93,51 @@ class _RegisterState extends State<Register> {
     );
   }
 
-  Widget registerLink(AppLocalizations localization) {
+  Widget loginLink(BuildContext context, AppLocalizations localization) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            toBeginningOfSentenceCase(localization.dontHaveAnAccount)!,
+            toBeginningOfSentenceCase(localization.haveAnAccount)!,
             style: const TextStyle(
               fontSize: 14.0,
               fontWeight: FontWeight.w500,
             ),
           ),
-          Text(
-            toBeginningOfSentenceCase(localization.register)!,
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 14.0,
-              color: Theme.of(context).primaryColor,
+          GestureDetector(
+            onTap: () => login(context),
+            child: Text(
+              toBeginningOfSentenceCase(localization.login)!,
+              style: const TextStyle(
+                fontSize: 14.0,
+                fontWeight: FontWeight.w500,
+                color: Colors.blue,
+              ),
             ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget rememberCheck(AppLocalizations localization) {
+    return Row(
+      children: [
+        Radio(
+          value: true,
+          groupValue: remember,
+          toggleable: true,
+          onChanged: toggleRemember,
+        ),
+        Text(
+          toBeginningOfSentenceCase(localization.rememberMe)!,
+          style: const TextStyle(
+            fontSize: 12.0,
+          ),
+        ),
+      ],
     );
   }
 
@@ -106,60 +148,52 @@ class _RegisterState extends State<Register> {
     return Scaffold(
       body: SingleChildScrollView(
         child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              children: [
-                AuthTitle(
-                  title: toBeginningOfSentenceCase(
-                    localization.createAccount,
-                  )!,
-                ),
-                Form(
-                  key: _formKey,
-                  child: inputs(localization),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
+          child: Column(
+            children: [
+              isLoading ? const LinearProgressIndicator() : Container(),
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  children: [
+                    AuthTitle(
+                      title: toBeginningOfSentenceCase(
+                        localization.register,
+                      )!,
+                    ),
+                    Form(
+                      key: _formKey,
+                      child: inputs(localization),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 20.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Radio(
-                            value: true,
-                            groupValue: remember,
-                            toggleable: true,
-                            onChanged: toggleRemember,
-                          ),
+                          rememberCheck(localization),
                           Text(
-                            toBeginningOfSentenceCase(localization.rememberMe)!,
-                            style: const TextStyle(
+                            toBeginningOfSentenceCase(
+                                localization.forgotPassword)!,
+                            style: TextStyle(
                               fontSize: 12.0,
+                              color: Theme.of(context).primaryColorDark,
                             ),
                           ),
                         ],
                       ),
-                      Text(
-                        toBeginningOfSentenceCase(localization.forgotPassword)!,
-                        style: TextStyle(
-                          fontSize: 12.0,
-                          color: Theme.of(context).primaryColorDark,
-                        ),
+                    ),
+                    ElevatedButton(
+                      onPressed: isLoading ? null : submit,
+                      child:
+                          Text(toBeginningOfSentenceCase(localization.accept)!),
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size.fromHeight(40.0),
                       ),
-                    ],
-                  ),
+                    ),
+                    loginLink(context, localization),
+                  ],
                 ),
-                ElevatedButton(
-                  onPressed: submit,
-                  child: Text(toBeginningOfSentenceCase(localization.accept)!),
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size.fromHeight(40.0),
-                  ),
-                ),
-                registerLink(localization),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

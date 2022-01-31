@@ -1,4 +1,5 @@
-import 'package:classroom_mobile/http/service.dart';
+import 'package:classroom_mobile/repository/auth_repository.dart';
+import 'package:classroom_mobile/router/router_page_manager.dart';
 import 'package:classroom_mobile/utils/validation.dart';
 import 'package:flutter/material.dart';
 import 'package:classroom_mobile/modules/auth/widgets/auth_title.dart';
@@ -24,13 +25,28 @@ class _LoginState extends State<Login> {
 
   bool remember = false;
 
+  bool isLoading = false;
+
   submit() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
-      login(_loginData.email ?? '', _loginData.password ?? '')
-          .then((value) => print(value))
-          .catchError((error) => print(error));
+      setState(() {
+        isLoading = true;
+      });
+
+      login(
+        email: _loginData.email ?? '',
+        password: _loginData.password ?? '',
+      ).then((value) {
+        setState(() {
+          isLoading = false;
+        });
+      }).catchError((error) {
+        setState(() {
+          isLoading = false;
+        });
+      });
     }
   }
 
@@ -38,6 +54,10 @@ class _LoginState extends State<Login> {
     setState(() {
       remember = value ?? false;
     });
+  }
+
+  void register(BuildContext context) {
+    RouterPageManager.of(context).push('/register');
   }
 
   Widget inputs(AppLocalizations localization) {
@@ -73,7 +93,7 @@ class _LoginState extends State<Login> {
     );
   }
 
-  Widget registerLink(AppLocalizations localization) {
+  Widget registerLink(BuildContext context, AppLocalizations localization) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 10),
       child: Row(
@@ -86,16 +106,38 @@ class _LoginState extends State<Login> {
               fontWeight: FontWeight.w500,
             ),
           ),
-          Text(
-            toBeginningOfSentenceCase(localization.register)!,
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 14.0,
-              color: Theme.of(context).primaryColor,
+          GestureDetector(
+            onTap: () => register(context),
+            child: Text(
+              toBeginningOfSentenceCase(localization.register)!,
+              style: const TextStyle(
+                fontSize: 14.0,
+                fontWeight: FontWeight.w500,
+                color: Colors.blue,
+              ),
             ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget rememberCheck(AppLocalizations localization) {
+    return Row(
+      children: [
+        Radio(
+          value: true,
+          groupValue: remember,
+          toggleable: true,
+          onChanged: toggleRemember,
+        ),
+        Text(
+          toBeginningOfSentenceCase(localization.rememberMe)!,
+          style: const TextStyle(
+            fontSize: 12.0,
+          ),
+        ),
+      ],
     );
   }
 
@@ -106,60 +148,52 @@ class _LoginState extends State<Login> {
     return Scaffold(
       body: SingleChildScrollView(
         child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              children: [
-                AuthTitle(
-                  title: toBeginningOfSentenceCase(
-                    localization.login,
-                  )!,
-                ),
-                Form(
-                  key: _formKey,
-                  child: inputs(localization),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
+          child: Column(
+            children: [
+              isLoading ? const LinearProgressIndicator() : Container(),
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  children: [
+                    AuthTitle(
+                      title: toBeginningOfSentenceCase(
+                        localization.login,
+                      )!,
+                    ),
+                    Form(
+                      key: _formKey,
+                      child: inputs(localization),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 20.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Radio(
-                            value: true,
-                            groupValue: remember,
-                            toggleable: true,
-                            onChanged: toggleRemember,
-                          ),
+                          rememberCheck(localization),
                           Text(
-                            toBeginningOfSentenceCase(localization.rememberMe)!,
-                            style: const TextStyle(
+                            toBeginningOfSentenceCase(
+                                localization.forgotPassword)!,
+                            style: TextStyle(
                               fontSize: 12.0,
+                              color: Theme.of(context).primaryColorDark,
                             ),
                           ),
                         ],
                       ),
-                      Text(
-                        toBeginningOfSentenceCase(localization.forgotPassword)!,
-                        style: TextStyle(
-                          fontSize: 12.0,
-                          color: Theme.of(context).primaryColorDark,
-                        ),
+                    ),
+                    ElevatedButton(
+                      onPressed: isLoading ? null : submit,
+                      child:
+                          Text(toBeginningOfSentenceCase(localization.accept)!),
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size.fromHeight(40.0),
                       ),
-                    ],
-                  ),
+                    ),
+                    registerLink(context, localization),
+                  ],
                 ),
-                ElevatedButton(
-                  onPressed: submit,
-                  child: Text(toBeginningOfSentenceCase(localization.accept)!),
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size.fromHeight(40.0),
-                  ),
-                ),
-                registerLink(localization),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

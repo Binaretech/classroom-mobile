@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 
 class Response {
   final int statusCode;
-  final Map data;
+  final Map<String, dynamic> data;
 
   Response(this.statusCode, this.data);
 }
@@ -17,14 +17,12 @@ class Request {
       {Map<String, String>? headers, Object? body, Encoding? encoding}) async {
     try {
       final res = await http.post(Uri.http(config['domain']!, url),
-          body: body, headers: headers, encoding: encoding);
-
-      return Response(res.statusCode, json.decode(res.body));
+          body: body,
+          headers: headers,
+          encoding: encoding ?? Encoding.getByName('utf-8'));
+      return Response(res.statusCode, json.decode(utf8.decode(res.bodyBytes)));
     } catch (e) {
-      snackbarKey.currentState
-          ?.showSnackBar(const SnackBar(content: Text("asdasdasd")));
-
-      return Response(0, {});
+      throw Response(0, {});
     }
   }
 }

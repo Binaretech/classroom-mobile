@@ -20,7 +20,7 @@ class AppRouterDelegate extends RouterDelegate<AppPath>
     return (Route<dynamic> route, dynamic result) {
       final pop = route.didPop(result);
       if (pop) {
-        pageManager.pop(route.settings as Page);
+        pageManager.popPage(route.settings as Page);
       }
 
       return pop;
