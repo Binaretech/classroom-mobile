@@ -16,9 +16,18 @@ bool hasResponseErrors(Response response) {
 }
 
 String extractErrorFromResponse(Response response) {
+  if (response.data.containsKey('validationErrors')) {
+    return extractValidationErrors(
+        response.data['validationErrors'] as Map<String, dynamic>);
+  }
+
   if (response.data.containsKey('error')) {
     return response.data['error'];
   }
 
   return 'Unknown error';
+}
+
+String extractValidationErrors(Map<String, dynamic> validationErrors) {
+  return validationErrors.values.map((error) => error.join(', ')).join('\n');
 }

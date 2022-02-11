@@ -7,6 +7,10 @@
     "@createAccount": {
       "description":"Create account"
     },
+    "continueMsg": "continue",
+    "@continueMsg": {
+      "description":"continue text"
+    },
     "dontHaveAnAccount":"don't have an account?",
     "@dontHaveAnAccount":{
       "description": "don't have an account message"
@@ -46,5 +50,27 @@
     "password": "password",
     "@password": {
        "description": "user password"
+    },
+    "profileInfo": "Profile info",
+    "@profileInfo": {
+        "description": "profile info title"
+    },
+    "passwordConfirm": "password confirm",
+    "@passwordConfirm": {
+      "description": "password confirm label"
+    },
+    "equalsRule": "{value1} must be equals to {value2}",
+    "@equalsRule": {
+      "description": "Value must be equals message",
+      "placeholders": {
+        "value1": {
+          "type": "String",
+          "example": "password"
+        },
+        "value2": {
+          "type": "String",
+          "example": "password confirm"
+        }
+      }
     }
 }

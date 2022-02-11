@@ -1,6 +1,7 @@
 {
     "accept": "aceptar",
     "createAccount": "Crear cuenta",
+    "continueMsg": "continuar",
     "dontHaveAnAccount": "¿No posee una cuenta?",
     "email": "correo electrónico",
     "forgotPassword": "olvidé mi contraseña",
@@ -10,5 +11,8 @@
     "register": "registrarse",
     "required": "requerido",
     "rememberMe": "recuerdame",
-    "password": "contraseña"
+    "password": "contraseña",
+    "profileInfo":"Información de perfil",
+    "passwordConfirm": "confirmar contraseña",
+    "equalsRule": "{value1} debe ser igual a {value2}"
 }

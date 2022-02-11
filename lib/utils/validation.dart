@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 
 typedef Rule = String? Function(AppLocalizations, String?);
 
+/// Pipeline of rules to apply to a string.
 String? Function(String?) rules(AppLocalizations localization,
     List<String? Function(AppLocalizations, String?)> fns) {
   return (String? input) {
@@ -17,6 +18,7 @@ String? Function(String?) rules(AppLocalizations localization,
   };
 }
 
+/// A [Rule] that check if the input is not empty.
 String? requiredRule(AppLocalizations localization, String? input) {
   if (input?.isEmpty ?? false) {
     return localization.required;
@@ -24,6 +26,7 @@ String? requiredRule(AppLocalizations localization, String? input) {
   return null;
 }
 
+/// A [Rule] that check if the input is a valid email.
 String? emailRule(AppLocalizations localization, String? input) {
   if (input == null || input.isEmpty) {
     return null;
@@ -35,4 +38,16 @@ String? emailRule(AppLocalizations localization, String? input) {
   }
 
   return null;
+}
+
+/// A [Rule] that check if the input is equals to the [value] input.
+String? Function(AppLocalizations, String?) equalsRule(
+    String? Function() value, String value1, String value2) {
+  return (AppLocalizations localization, String? input) {
+    if (input != value()) {
+      return localization.equalsRule(value1, value2);
+    }
+
+    return null;
+  };
 }

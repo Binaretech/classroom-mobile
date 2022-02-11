@@ -1,5 +1,4 @@
 import 'package:classroom_mobile/repository/auth_repository.dart';
-import 'package:classroom_mobile/router/router_page_manager.dart';
 import 'package:classroom_mobile/utils/validation.dart';
 import 'package:flutter/material.dart';
 import 'package:classroom_mobile/modules/auth/widgets/auth_title.dart';
@@ -7,11 +6,13 @@ import 'package:classroom_mobile/widgets/password_input.dart';
 import 'package:intl/intl.dart';
 import 'package:classroom_mobile/l10n/localization.dart';
 
+/// Form data to be submitted to the server
 class LoginData {
   String? email;
   String? password;
 }
 
+/// Login screen for the application that allows the user to login with their email and password credentials and then redirects to the home screen if successful
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
 
@@ -28,26 +29,27 @@ class _LoginState extends State<Login> {
   bool isLoading = false;
 
   submit() {
-    if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
+    return () {
+      if (_formKey.currentState!.validate()) {
+        _formKey.currentState!.save();
 
-      setState(() {
-        isLoading = true;
-      });
+        setState(() {
+          isLoading = true;
+        });
 
-      login(
-        email: _loginData.email ?? '',
-        password: _loginData.password ?? '',
-      ).then((value) {
-        setState(() {
-          isLoading = false;
+        login(
+          email: _loginData.email ?? '',
+          password: _loginData.password ?? '',
+        ).then((value) {
+          Navigator.restorablePushNamedAndRemoveUntil(
+              context, '/', (route) => false);
+        }).catchError((error) {
+          setState(() {
+            isLoading = false;
+          });
         });
-      }).catchError((error) {
-        setState(() {
-          isLoading = false;
-        });
-      });
-    }
+      }
+    };
   }
 
   toggleRemember(value) {
@@ -57,7 +59,9 @@ class _LoginState extends State<Login> {
   }
 
   void register(BuildContext context) {
-    RouterPageManager.of(context).push('/register');
+    final navigator = Navigator.of(context);
+
+    navigator.pushNamed('/register');
   }
 
   Widget inputs(AppLocalizations localization) {
@@ -97,10 +101,10 @@ class _LoginState extends State<Login> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 10),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            toBeginningOfSentenceCase(localization.dontHaveAnAccount)!,
+            toBeginningOfSentenceCase(localization.dontHaveAnAccount)! + ' ',
             style: const TextStyle(
               fontSize: 14.0,
               fontWeight: FontWeight.w500,
@@ -182,7 +186,7 @@ class _LoginState extends State<Login> {
                       ),
                     ),
                     ElevatedButton(
-                      onPressed: isLoading ? null : submit,
+                      onPressed: isLoading ? null : submit(),
                       child:
                           Text(toBeginningOfSentenceCase(localization.accept)!),
                       style: ElevatedButton.styleFrom(
