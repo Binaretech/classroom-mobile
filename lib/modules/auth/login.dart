@@ -1,8 +1,10 @@
+import 'package:classroom_mobile/bloc/authentication/authentication_bloc.dart';
 import 'package:classroom_mobile/repository/auth_repository.dart';
 import 'package:classroom_mobile/utils/validation.dart';
 import 'package:flutter/material.dart';
 import 'package:classroom_mobile/modules/auth/widgets/auth_title.dart';
 import 'package:classroom_mobile/widgets/password_input.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:classroom_mobile/l10n/localization.dart';
 
@@ -41,6 +43,10 @@ class _LoginState extends State<Login> {
           email: _loginData.email ?? '',
           password: _loginData.password ?? '',
         ).then((value) {
+          context
+              .read<AuthenticationBloc>()
+              .add(AuthenticationStatusChanged(token: value.token.accessToken));
+
           Navigator.restorablePushNamedAndRemoveUntil(
               context, '/', (route) => false);
         }).catchError((error) {

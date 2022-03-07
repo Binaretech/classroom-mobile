@@ -8,13 +8,16 @@ abstract class AuthenticationEvent extends Equatable {
 }
 
 class AuthenticationStatusChanged extends AuthenticationEvent {
-  final AuthenticationStatus status;
+  final String token;
 
-  const AuthenticationStatusChanged({required this.status});
+  const AuthenticationStatusChanged({this.token = ''});
+
+  get isAuthenticated => token.isNotEmpty;
 
   @override
-  List<Object> get props => [status];
+  List<Object> get props => [token];
 
   @override
-  String toString() => 'AuthenticationStatusChanged { status: $status }';
+  String toString() =>
+      'AuthenticationStatusChanged { status: $isAuthenticated }';
 }

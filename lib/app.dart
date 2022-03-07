@@ -1,4 +1,6 @@
 import 'package:classroom_mobile/bloc/authentication/authentication_bloc.dart';
+import 'package:classroom_mobile/bloc/user/user_bloc.dart';
+import 'package:classroom_mobile/bloc/configuration/configuration_bloc.dart';
 import 'package:classroom_mobile/globals.dart';
 import 'package:classroom_mobile/l10n/localization.dart';
 import 'package:classroom_mobile/modules/auth/RegisterUserInfo.dart';
@@ -9,30 +11,84 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class App extends StatelessWidget {
-  const App({Key? key}) : super(key: key);
+  final String? token;
+  final String? userData;
+
+  const App({
+    Key? key,
+    this.token,
+    this.userData,
+  }) : super(key: key);
+
+  Widget _buildApp(BuildContext context, ConfigurationState config,
+      AuthenticationState auth) {
+    return MaterialApp(
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      locale: config.locale,
+      title: 'Classroom',
+      navigatorKey: navigatorKey,
+      scaffoldMessengerKey: snackbarKey,
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      darkTheme: ThemeData.dark(),
+      themeMode: config.themeMode,
+      initialRoute: auth.isAutheticated ? '/' : '/login',
+      routes: {
+        '/': (_) => const Home(),
+        '/login': (_) => const Login(),
+        '/register': (_) => const Register(),
+        '/register/user': (_) => const RegisterUserInfo(),
+      },
+    );
+  }
+
+  List<BlocProvider> _blocProviders() {
+    return [
+      BlocProvider<AuthenticationBloc>(
+        create: (_) => AuthenticationBloc(token: token),
+      ),
+      BlocProvider<ConfigurationBloc>(
+        create: (_) => ConfigurationBloc(),
+      ),
+      BlocProvider<UserBloc>(
+        create: (_) => UserBloc(userData: userData),
+      ),
+    ];
+  }
+
+  Widget _blocBuilders({
+    required BuildContext context,
+    required Widget Function(
+      BuildContext,
+      ConfigurationState,
+      AuthenticationState,
+    )
+        builder,
+  }) {
+    return BlocBuilder<ConfigurationBloc, ConfigurationState>(
+      bloc: BlocProvider.of<ConfigurationBloc>(context),
+      builder: (BuildContext context, ConfigurationState config) {
+        return BlocBuilder<AuthenticationBloc, AuthenticationState>(
+          bloc: BlocProvider.of<AuthenticationBloc>(context),
+          builder: (BuildContext context, AuthenticationState auth) {
+            return builder(context, config, auth);
+          },
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => AuthenticationBloc(),
-      child: MaterialApp(
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        locale: const Locale('es'),
-        title: 'Classroom',
-        scaffoldMessengerKey: snackbarKey,
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
+    return MultiBlocProvider(
+      providers: _blocProviders(),
+      child: Builder(
+        builder: (context) => _blocBuilders(
+          context: context,
+          builder: _buildApp,
         ),
-        darkTheme: ThemeData.dark(),
-        themeMode: ThemeMode.system,
-        initialRoute: '/register/user',
-        routes: {
-          '/': (BuildContext context) => const Home(),
-          '/login': (BuildContext context) => const Login(),
-          '/register': (BuildContext context) => const Register(),
-          '/register/user': (BuildContext context) => const RegisterUserInfo(),
-        },
       ),
     );
   }

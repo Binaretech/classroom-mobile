@@ -1,14 +1,14 @@
 part of 'authentication_bloc.dart';
 
 class AuthenticationState extends Equatable {
-  final AuthenticationStatus status;
+  final String token;
 
-  const AuthenticationState._({
-    this.status = AuthenticationStatus.unknown,
+  const AuthenticationState({
+    this.token = '',
   });
 
-  const AuthenticationState.unknown() : this._();
+  bool get isAutheticated => token.isNotEmpty;
 
   @override
-  List<Object> get props => [status];
+  List<Object> get props => [token];
 }
