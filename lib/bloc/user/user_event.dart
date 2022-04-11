@@ -5,15 +5,11 @@ abstract class UserEvent extends Equatable {
 }
 
 class SetUserEvent extends UserEvent {
-  final String id;
-  final String name;
-  final String lastname;
-
-  const SetUserEvent(
-      {required this.id, required this.name, required this.lastname});
+  final User user;
+  const SetUserEvent({required this.user});
 
   @override
-  List<Object> get props => [id, name, lastname];
+  List<Object> get props => [user];
 }
 
 class RemoveUserEvent extends UserEvent {

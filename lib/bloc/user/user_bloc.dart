@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
+import 'package:classroom_mobile/models/user.dart';
 import 'package:equatable/equatable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -12,20 +13,10 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     on<SetUserEvent>(
       (event, emit) {
         SharedPreferences.getInstance().then((prefs) {
-          prefs.setString(
-              'user',
-              json.encode({
-                'id': event.id,
-                'name': event.name,
-                'lastname': event.lastname,
-              }));
+          prefs.setString('user', json.encode(event.user.toMap()));
         });
 
-        return emit(LoggedUserState(
-          id: event.id,
-          name: event.name,
-          lastname: event.lastname,
-        ));
+        return emit(LoggedUserState(user: event.user));
       },
     );
 
@@ -46,11 +37,7 @@ UserState loadInitialState(String? userData) {
     return const UnLoggedUserState();
   }
 
-  final user = json.decode(userData);
+  final user = json.decode(userData) as Map<String, dynamic>;
 
-  return LoggedUserState(
-    id: user['id'],
-    name: user['name'],
-    lastname: user['lastname'],
-  );
+  return LoggedUserState(user: User.fromMap(user));
 }

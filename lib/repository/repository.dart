@@ -14,7 +14,7 @@ bool checkUnauthenticated(Response response) {
 
     final userBloc = BlocProvider.of<UserBloc>(navigatorKey.currentContext!);
 
-    authBloc.add(const AuthenticationStatusChanged());
+    authBloc.add(const UnauthenticateUser());
     userBloc.add(const RemoveUserEvent());
 
     navigatorKey.currentState
@@ -33,8 +33,7 @@ bool hasResponseErrors(Response response) {
   }
 
   if (checkUnauthenticated(response)) {
-    navigatorKey.currentState
-        ?.restorablePushNamedAndRemoveUntil('/login', (route) => false);
+    return true;
   }
 
   snackbarKey.currentState?.showSnackBar(SnackBar(
@@ -50,6 +49,10 @@ String extractErrorFromResponse(Response response) {
   if (response.data.containsKey('validationErrors')) {
     return extractValidationErrors(
         response.data['validationErrors'] as Map<String, dynamic>);
+  }
+
+  if (response.data.containsKey('message')) {
+    return response.data['message'] as String;
   }
 
   if (response.data.containsKey('error')) {

@@ -2,22 +2,37 @@ import 'package:flutter/material.dart';
 
 class Avatar extends StatelessWidget {
   final double radius;
-
   final double? iconSize;
+  final void Function()? onTap;
+  final IconData icon;
+  final Image? image;
 
-  const Avatar({Key? key, this.radius = 40, this.iconSize}) : super(key: key);
+  const Avatar({
+    Key? key,
+    this.radius = 40,
+    this.iconSize,
+    this.icon = Icons.person,
+    this.onTap,
+    this.image,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return CircleAvatar(
-      backgroundColor: theme.highlightColor,
-      child: Icon(
-        Icons.person,
-        color: theme.disabledColor,
-        size: iconSize,
+    return GestureDetector(
+      onTap: onTap,
+      child: CircleAvatar(
+        backgroundColor: theme.highlightColor,
+        foregroundImage: image?.image,
+        child: image == null
+            ? Icon(
+                Icons.camera_alt,
+                color: theme.disabledColor,
+                size: iconSize,
+              )
+            : null,
+        radius: radius,
       ),
-      radius: radius,
     );
   }
 }

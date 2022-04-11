@@ -1,9 +1,7 @@
-import 'package:classroom_mobile/globals.dart';
 import 'package:classroom_mobile/http/request.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:classroom_mobile/bloc/user/user_bloc.dart';
 
 part 'authentication_event.dart';
 part 'authentication_state.dart';
@@ -16,20 +14,27 @@ class AuthenticationBloc
       Request.setToken(token);
     }
 
-    on<AuthenticationStatusChanged>(
+    on<AuthenticateUser>(
       (event, emit) {
         Request.setToken(event.token);
-
-        final userBloc =
-            BlocProvider.of<UserBloc>(navigatorKey.currentContext!);
 
         SharedPreferences.getInstance().then((prefs) {
           prefs.setString('token', event.token);
         });
 
-        userBloc.add(const RemoveUserEvent());
-
         return emit(AuthenticationState(token: event.token));
+      },
+    );
+
+    on<UnauthenticateUser>(
+      (event, emit) {
+        Request.setToken(null);
+
+        SharedPreferences.getInstance().then((prefs) {
+          prefs.remove('token');
+        });
+
+        return emit(const AuthenticationState());
       },
     );
   }

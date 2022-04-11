@@ -5,15 +5,12 @@ abstract class UserState extends Equatable {
 }
 
 class LoggedUserState extends UserState {
-  final String id;
-  final String name;
-  final String lastname;
+  final User user;
 
-  const LoggedUserState(
-      {required this.id, required this.name, required this.lastname});
+  const LoggedUserState({required this.user});
 
   @override
-  List<Object> get props => [id, name, lastname];
+  List<Object> get props => [user];
 }
 
 class UnLoggedUserState extends UserState {

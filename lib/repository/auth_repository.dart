@@ -1,4 +1,6 @@
 import 'package:classroom_mobile/http/request.dart';
+import 'package:classroom_mobile/models/file.dart';
+import 'package:classroom_mobile/models/user.dart';
 import 'package:classroom_mobile/repository/models/user.dart';
 import 'package:classroom_mobile/repository/repository.dart';
 
@@ -14,25 +16,52 @@ class AuthResponse {
 }
 
 /// Represents a response with the user data.
-class UserResponse {
-  final String id;
-  final String name;
-  final String lastname;
-
-  UserResponse(this.id, this.name, this.lastname);
+class UserResponse extends User {
+  UserResponse({
+    required String id,
+    required String name,
+    required String lastname,
+    File? profileImage,
+  }) : super(
+          id: id,
+          name: name,
+          lastname: lastname,
+          profileImage: profileImage,
+        );
 
   factory UserResponse.fromJson(Map<String, dynamic> json) {
-    return UserResponse(json['id'], json['name'], json['lastname']);
+    final user = json['user'] as Map<String, dynamic>;
+
+    final profileImage = user.containsKey('profileImage')
+        ? File(
+            id: user['profileImage']['ID'],
+            key: user['profileImage']['key'],
+            type: user['profileImage']['type'],
+            bucket: user['profileImage']['bucket'],
+            mimeType: user['profileImage']['mimeTYpe'],
+            fileableType: user['profileImage']['fileableType'],
+            fileableID: user['profileImage']['fileableID'])
+        : null;
+
+    return UserResponse(
+      id: user['ID'],
+      name: user['name'],
+      lastname: user['lastname'],
+      profileImage: profileImage,
+    );
   }
 }
 
 /// Sends a request to login the user.
 Future<AuthResponse> login(
     {required String email, required String password}) async {
-  final response = await Request.post('/auth/login', body: {
-    'email': email,
-    'password': password,
-  });
+  final response = await Request.post(
+    '/auth/login',
+    body: {
+      'email': email,
+      'password': password,
+    },
+  );
 
   if (hasResponseErrors(response)) {
     throw Exception(response);

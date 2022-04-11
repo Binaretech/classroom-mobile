@@ -54,4 +54,48 @@ class Lang {
 
     return text;
   }
+
+  /// Returns the translation for the given translation key and a choice for pluralization. If the translation is not found, the key is returned.
+  String choice(String key, int choice,
+      {bool capitalize = false, Map<String, String> replace = const {}}) {
+    final text = trans(key);
+
+    final result = text.split('|').firstWhere((alternative) {
+      final condition = RegExp(r'({\d+}|\[[\d+\*],[\d+\*]\])').firstMatch(text);
+
+      return _testChoiceCondition(condition.toString(), choice);
+    }, orElse: () => text);
+
+    return result
+        .replaceAll(RegExp(r'({\d+}|\[[\d+\*],[\d+\*]\])'), '')
+        .replaceAll(':count', choice.toString())
+        .trim();
+  }
+
+  bool _testChoiceCondition(String condition, int choice) {
+    if (RegExp(r'{\d+}').hasMatch(condition)) {
+      return choice == int.parse(condition.replaceAll(RegExp(r'{|}'), ''));
+    }
+
+    if (RegExp(r'\[\d+,\d+\]').hasMatch(condition)) {
+      final bounds = condition
+          .replaceAll(RegExp(r'[\[\]]'), '')
+          .split(',')
+          .map((bound) => int.parse(bound))
+          .toList();
+      return choice >= bounds[0] && choice <= bounds[1];
+    }
+
+    if (RegExp(r'\[\d+\*\]').hasMatch(condition)) {
+      final bound = int.parse(condition.replaceAll(RegExp(r'[\[\]]'), ''));
+      return choice >= bound;
+    }
+
+    if (RegExp(r'\[\*,\d+\]').hasMatch(condition)) {
+      final bound = int.parse(condition.replaceAll(RegExp(r'[\[\]]'), ''));
+      return choice <= bound;
+    }
+
+    return false;
+  }
 }

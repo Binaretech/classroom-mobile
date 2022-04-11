@@ -1,12 +1,11 @@
 import 'package:classroom_mobile/bloc/authentication/authentication_bloc.dart';
+import 'package:classroom_mobile/lang/lang.dart';
 import 'package:classroom_mobile/repository/auth_repository.dart';
 import 'package:classroom_mobile/utils/validation.dart';
 import 'package:flutter/material.dart';
 import 'package:classroom_mobile/modules/auth/widgets/auth_title.dart';
 import 'package:classroom_mobile/widgets/password_input.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
-import 'package:classroom_mobile/l10n/localization.dart';
 
 /// Form data to be submitted to the server
 class LoginData {
@@ -45,7 +44,7 @@ class _LoginState extends State<Login> {
         ).then((value) {
           context
               .read<AuthenticationBloc>()
-              .add(AuthenticationStatusChanged(token: value.token.accessToken));
+              .add(AuthenticateUser(value.token.accessToken));
 
           Navigator.restorablePushNamedAndRemoveUntil(
               context, '/', (route) => false);
@@ -70,7 +69,9 @@ class _LoginState extends State<Login> {
     navigator.pushNamed('/register');
   }
 
-  Widget inputs(AppLocalizations localization) {
+  Widget inputs() {
+    final lang = Lang.of(context);
+
     return Column(
       children: [
         Padding(
@@ -83,10 +84,10 @@ class _LoginState extends State<Login> {
             style: const TextStyle(
               fontSize: 16.0,
             ),
-            validator: rules(localization, [requiredRule, emailRule]),
+            validator: rules([requiredRule, emailRule]),
             decoration: InputDecoration(
               border: const OutlineInputBorder(),
-              labelText: toBeginningOfSentenceCase(localization.email),
+              labelText: lang.trans('attributes.email'),
             ),
           ),
         ),
@@ -96,30 +97,35 @@ class _LoginState extends State<Login> {
             onSaved: (value) {
               _loginData.password = value;
             },
-            validator: rules(localization, [requiredRule]),
+            validator: rules([requiredRule]),
           ),
         ),
       ],
     );
   }
 
-  Widget registerLink(BuildContext context, AppLocalizations localization) {
+  Widget registerLink() {
+    final lang = Lang.of(context);
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            toBeginningOfSentenceCase(localization.dontHaveAnAccount)! + ' ',
-            style: const TextStyle(
-              fontSize: 14.0,
-              fontWeight: FontWeight.w500,
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: Text(
+              lang.trans('views.login.dont_have_an_account', capitalize: true),
+              style: const TextStyle(
+                fontSize: 14.0,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
           GestureDetector(
             onTap: () => register(context),
             child: Text(
-              toBeginningOfSentenceCase(localization.register)!,
+              lang.trans('views.login.register', capitalize: true),
               style: const TextStyle(
                 fontSize: 14.0,
                 fontWeight: FontWeight.w500,
@@ -132,7 +138,9 @@ class _LoginState extends State<Login> {
     );
   }
 
-  Widget rememberCheck(AppLocalizations localization) {
+  Widget rememberCheck() {
+    final lang = Lang.of(context);
+
     return Row(
       children: [
         Radio(
@@ -142,7 +150,7 @@ class _LoginState extends State<Login> {
           onChanged: toggleRemember,
         ),
         Text(
-          toBeginningOfSentenceCase(localization.rememberMe)!,
+          lang.trans('views.login.remember_me', capitalize: true),
           style: const TextStyle(
             fontSize: 12.0,
           ),
@@ -153,7 +161,7 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    final localization = AppLocalizations.of(context)!;
+    final lang = Lang.of(context);
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -166,23 +174,20 @@ class _LoginState extends State<Login> {
                 child: Column(
                   children: [
                     AuthTitle(
-                      title: toBeginningOfSentenceCase(
-                        localization.login,
-                      )!,
+                      title: lang.trans('views.login.title', capitalize: true),
                     ),
                     Form(
                       key: _formKey,
-                      child: inputs(localization),
+                      child: inputs(),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 20.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          rememberCheck(localization),
+                          rememberCheck(),
                           Text(
-                            toBeginningOfSentenceCase(
-                                localization.forgotPassword)!,
+                            lang.trans('views.login.forgot_password'),
                             style: TextStyle(
                               fontSize: 12.0,
                               color: Theme.of(context).primaryColorDark,
@@ -194,12 +199,12 @@ class _LoginState extends State<Login> {
                     ElevatedButton(
                       onPressed: isLoading ? null : submit(),
                       child:
-                          Text(toBeginningOfSentenceCase(localization.accept)!),
+                          Text(lang.trans('messages.accept', capitalize: true)),
                       style: ElevatedButton.styleFrom(
                         minimumSize: const Size.fromHeight(40.0),
                       ),
                     ),
-                    registerLink(context, localization),
+                    registerLink(),
                   ],
                 ),
               ),
