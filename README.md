@@ -1,16 +1,12 @@
-# classroom_mobile
+# Classroom Mobile App
 
-A new Flutter project.
+## Arquitecture
 
-## Getting Started
+The full classroom is made up with three services routed by traefik, a mobile and web app, two databases and a cache store
 
-This project is a starting point for a Flutter application.
+This repository contains the mobile app build with flutter
 
-A few resources to get you started if this is your first Flutter project:
+The following image describe the full arquitecture and the tecnologies used
+![arquitecture](https://github.com/Binaretech/classroom/blob/main/img/classroom-diagram.png?raw=true)
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Full source is available ![here](https://github.com/Binaretech/classroom)
