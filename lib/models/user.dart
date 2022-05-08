@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:classroom_mobile/models/file.dart';
 import 'package:equatable/equatable.dart';
 
@@ -15,12 +17,20 @@ class User extends Equatable {
   });
 
   User.fromMap(Map<String, dynamic> data)
-      : id = data['id'] as String,
+      : id = data['ID'] as String,
         name = data['name'] as String,
         lastname = data['lastname'] as String,
-        profileImage = data.containsKey('profileImage')
+        profileImage = data['profileImage'] != null
             ? File.fromMap(data['profileImage'])
             : null;
+
+  static User? fromJson(String? json) {
+    if (json == null) return null;
+
+    final data = jsonDecode(json) as Map<String, dynamic>;
+
+    return User.fromMap(data);
+  }
 
   String get fullName => "$name $lastname";
 
@@ -29,7 +39,7 @@ class User extends Equatable {
 
   Map<String, Object?> toMap() {
     return {
-      'id': id,
+      'ID': id,
       'name': name,
       'lastname': lastname,
       'profileImage': profileImage?.toMap(),

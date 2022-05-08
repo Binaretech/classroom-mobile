@@ -1,53 +1,132 @@
-import 'dart:io';
+import 'dart:io' as io;
 
 import 'package:classroom_mobile/http/request.dart';
-import 'package:classroom_mobile/repository/auth_repository.dart';
+import 'package:classroom_mobile/models/file.dart';
+import 'package:classroom_mobile/models/user.dart';
 import 'package:classroom_mobile/repository/repository.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:mime/mime.dart';
 
-Future<UserResponse?> getUser() async {
-  final response = await Request.get('/api/user');
+class UserRepository extends Repository {
+  final Request _client;
 
-  if (response.statusCode == 404) {
-    return null;
+  final MultipartRequest? _multipartClient;
+
+  UserRepository({Request? client, MultipartRequest? multipartClient})
+      : _client = client ?? Request(),
+        _multipartClient = multipartClient ?? MultipartRequest();
+
+  /// Sends a request to store user data.
+  Future<UserResponse> registerUserInfo({
+    required String name,
+    required String lastname,
+  }) async {
+    final response = await _client.post(
+      '/api/user',
+      body: {
+        'name': name,
+        'lastname': lastname,
+      },
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (hasResponseErrors(response)) {
+      throw Exception(response);
+    }
+
+    return UserResponse.fromJson(response.data);
   }
 
-  if (hasResponseErrors(response)) {
-    throw Exception(response);
+  Future<UserResponse?> getUser() async {
+    final response = await _client.get('/api/user');
+
+    if (response.statusCode == 404) {
+      return null;
+    }
+
+    if (hasResponseErrors(response)) {
+      throw Exception(response);
+    }
+
+    return UserResponse.fromJson(response.data);
   }
 
-  return UserResponse.fromJson(response.data);
+  Future<Response> storeUserData({
+    required String name,
+    required String lastname,
+    io.File? avatar,
+  }) async {
+    if (_multipartClient == null) {
+      throw Exception('Multipart client is null');
+    }
+
+    final response = await _multipartClient!.post(
+      '/api/user',
+      body: {
+        'name': name,
+        'lastname': lastname,
+      },
+      files: avatar != null
+          ? [
+              http.MultipartFile.fromBytes(
+                'image',
+                (await avatar.readAsBytes()).toList(),
+                contentType: MediaType.parse(
+                    lookupMimeType(avatar.path) ?? 'image/jpeg'),
+                filename: 'avatar.jpeg',
+              )
+            ]
+          : null,
+    );
+
+    if (hasResponseErrors(response)) {
+      throw Exception(response);
+    }
+
+    return response;
+  }
+
+  void close() {
+    _client.close();
+  }
 }
 
-Future<Response> storeUserData({
-  required String name,
-  required String lastname,
-  File? avatar,
-}) async {
-  final response = await Request.multipartPost(
-    '/api/user',
-    body: {
-      'name': name,
-      'lastname': lastname,
-    },
-    files: avatar != null
-        ? [
-            http.MultipartFile.fromBytes(
-              'image',
-              (await avatar.readAsBytes()).toList(),
-              contentType:
-                  MediaType.parse(lookupMimeType(avatar.path) ?? 'image/jpeg'),
-              filename: 'avatar.jpeg',
-            )
-          ]
-        : null,
-  );
+/// Represents a response with the user data.
+class UserResponse extends User {
+  const UserResponse({
+    required String id,
+    required String name,
+    required String lastname,
+    File? profileImage,
+  }) : super(
+          id: id,
+          name: name,
+          lastname: lastname,
+          profileImage: profileImage,
+        );
 
-  if (hasResponseErrors(response)) {
-    throw Exception(response);
+  factory UserResponse.fromJson(Map<String, dynamic> json) {
+    final user = json['user'] as Map<String, dynamic>;
+
+    final profileImage = user['profileImage'] != null
+        ? File(
+            id: user['profileImage']['ID'],
+            key: user['profileImage']['key'],
+            type: user['profileImage']['type'],
+            bucket: user['profileImage']['bucket'],
+            mimeType: user['profileImage']['mimeTYpe'],
+            fileableType: user['profileImage']['fileableType'],
+            fileableID: user['profileImage']['fileableID'])
+        : null;
+
+    return UserResponse(
+      id: user['ID'],
+      name: user['name'],
+      lastname: user['lastname'],
+      profileImage: profileImage,
+    );
   }
-
-  return response;
 }

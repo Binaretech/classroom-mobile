@@ -9,7 +9,7 @@ part 'user_event.dart';
 part 'user_state.dart';
 
 class UserBloc extends Bloc<UserEvent, UserState> {
-  UserBloc({String? userData}) : super(loadInitialState(userData)) {
+  UserBloc({User? user}) : super(initialState(user)) {
     on<SetUserEvent>(
       (event, emit) {
         SharedPreferences.getInstance().then((prefs) {
@@ -32,12 +32,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   }
 }
 
-UserState loadInitialState(String? userData) {
-  if (userData == null) {
-    return const UnLoggedUserState();
-  }
+UserState initialState(User? user) {
+  if (user == null) return const UnLoggedUserState();
 
-  final user = json.decode(userData) as Map<String, dynamic>;
-
-  return LoggedUserState(user: User.fromMap(user));
+  return LoggedUserState(user: user);
 }

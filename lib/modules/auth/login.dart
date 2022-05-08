@@ -1,5 +1,6 @@
 import 'package:classroom_mobile/bloc/authentication/authentication_bloc.dart';
 import 'package:classroom_mobile/lang/lang.dart';
+import 'package:classroom_mobile/modules/auth/widgets/google_sign_in_button.dart';
 import 'package:classroom_mobile/repository/auth_repository.dart';
 import 'package:classroom_mobile/utils/validation.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,9 @@ class LoginData {
 
 /// Login screen for the application that allows the user to login with their email and password credentials and then redirects to the home screen if successful
 class Login extends StatefulWidget {
-  const Login({Key? key}) : super(key: key);
+  final AuthRepository repository;
+
+  const Login({Key? key, required this.repository}) : super(key: key);
 
   @override
   _LoginState createState() => _LoginState();
@@ -29,6 +32,13 @@ class _LoginState extends State<Login> {
 
   bool isLoading = false;
 
+  @override
+  dispose() {
+    widget.repository.close();
+
+    super.dispose();
+  }
+
   submit() {
     return () {
       if (_formKey.currentState!.validate()) {
@@ -38,10 +48,12 @@ class _LoginState extends State<Login> {
           isLoading = true;
         });
 
-        login(
+        widget.repository
+            .login(
           email: _loginData.email ?? '',
           password: _loginData.password ?? '',
-        ).then((value) {
+        )
+            .then((value) {
           context
               .read<AuthenticationBloc>()
               .add(AuthenticateUser(value.token.accessToken));
@@ -87,7 +99,7 @@ class _LoginState extends State<Login> {
             validator: rules([requiredRule, emailRule]),
             decoration: InputDecoration(
               border: const OutlineInputBorder(),
-              labelText: lang.trans('attributes.email'),
+              labelText: lang.trans('attributes.email', capitalize: true),
             ),
           ),
         ),
@@ -198,12 +210,16 @@ class _LoginState extends State<Login> {
                     ),
                     ElevatedButton(
                       onPressed: isLoading ? null : submit(),
-                      child:
-                          Text(lang.trans('messages.accept', capitalize: true)),
+                      child: Text(
+                        lang.trans('messages.accept').toUpperCase(),
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w700, fontSize: 14.0),
+                      ),
                       style: ElevatedButton.styleFrom(
                         minimumSize: const Size.fromHeight(40.0),
                       ),
                     ),
+                    GoogleSignInButton(),
                     registerLink(),
                   ],
                 ),

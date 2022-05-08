@@ -17,7 +17,9 @@ class RequestData {
 }
 
 class RegisterUserInfo extends StatefulWidget {
-  const RegisterUserInfo({Key? key}) : super(key: key);
+  final UserRepository repository;
+  const RegisterUserInfo({Key? key, required this.repository})
+      : super(key: key);
 
   @override
   _RegisterUserInfoState createState() => _RegisterUserInfoState();
@@ -36,7 +38,7 @@ class _RegisterUserInfoState extends State<RegisterUserInfo> {
       _formKey.currentState!.save();
     }
 
-    final user = await storeUserData(
+    final user = await widget.repository.storeUserData(
       name: _userData.name!,
       lastname: _userData.lastname!,
       avatar: await _getImageFile(),

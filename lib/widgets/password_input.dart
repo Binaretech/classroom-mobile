@@ -31,8 +31,8 @@ class _PasswordInputState extends State<PasswordInput> {
       obscureText: _obscureText,
       decoration: InputDecoration(
         border: const OutlineInputBorder(),
-        labelText:
-            widget.label ?? Lang.of(context).trans('attributes.password'),
+        labelText: widget.label ??
+            Lang.of(context).trans('attributes.password', capitalize: true),
         suffixIcon: IconButton(
           icon: const Icon(Icons.remove_red_eye),
           onPressed: () => _toggleObscureText(),

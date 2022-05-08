@@ -6,4 +6,5 @@ final _messages = {
   'camera': 'cámara',
   'gallery': 'galería',
   'image source': 'fuente de imagen',
+  'loginWithGoogle': 'iniciar sesión con Google',
 };

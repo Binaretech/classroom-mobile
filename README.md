@@ -1,5 +1,7 @@
 # Classroom Mobile App
 
+[![Flutter CI](https://github.com/Binaretech/classroom-mobile/actions/workflows/main.yml/badge.svg)](https://github.com/Binaretech/classroom-mobile/actions/workflows/main.yml)
+
 ## Arquitecture
 
 The full classroom is made up with three services routed by traefik, a mobile and web app, two databases and a cache store

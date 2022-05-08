@@ -24,7 +24,7 @@ class AppDrawer extends StatelessWidget {
     return CircleAvatar(
       radius: 30.0,
       foregroundImage: image,
-      child: Text("${user.name[0]} ${user.lastname[0]}"),
+      child: Text("${user.name[0]}${user.lastname[0]}"),
     );
   }
 

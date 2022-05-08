@@ -17,6 +17,7 @@ class AuthenticationBloc
     on<AuthenticateUser>(
       (event, emit) {
         Request.setToken(event.token);
+        MultipartRequest.setToken(event.token);
 
         SharedPreferences.getInstance().then((prefs) {
           prefs.setString('token', event.token);

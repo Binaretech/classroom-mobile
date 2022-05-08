@@ -1,4 +1,5 @@
 import 'package:classroom_mobile/lang/lang.dart';
+import 'package:classroom_mobile/modules/auth/widgets/google_sign_in_button.dart';
 import 'package:classroom_mobile/repository/auth_repository.dart';
 import 'package:classroom_mobile/utils/validation.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,8 @@ class RegisterData {
 
 /// Register screen for new users to create an account on the app.
 class Register extends StatefulWidget {
-  const Register({Key? key}) : super(key: key);
+  final AuthRepository repository;
+  const Register({Key? key, required this.repository}) : super(key: key);
 
   @override
   _RegisterState createState() => _RegisterState();
@@ -28,6 +30,12 @@ class _RegisterState extends State<Register> {
 
   bool isLoading = false;
 
+  @override
+  dispose() {
+    widget.repository.close();
+    super.dispose();
+  }
+
   submit() {
     _formKey.currentState!.save();
 
@@ -36,10 +44,12 @@ class _RegisterState extends State<Register> {
         isLoading = true;
       });
 
-      register(
+      widget.repository
+          .register(
         email: _registerData.email ?? '',
         password: _registerData.password ?? '',
-      ).then((response) {
+      )
+          .then((response) {
         Navigator.restorablePushNamedAndRemoveUntil(
             context, '/', (route) => false);
       }).catchError((_) {
@@ -99,7 +109,7 @@ class _RegisterState extends State<Register> {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 16.0),
           child: PasswordInput(
-            label: lang.trans('attributes.password_confirm'),
+            label: lang.trans('attributes.password_confirm', capitalize: true),
             onSaved: (value) {
               _registerData.passwordConfirmation = value;
             },
@@ -195,12 +205,17 @@ class _RegisterState extends State<Register> {
                     ElevatedButton(
                       onPressed: isLoading ? null : submit,
                       child: Text(
-                        lang.trans('messages.accept'),
+                        lang.trans('messages.accept').toUpperCase(),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 14.0,
+                        ),
                       ),
                       style: ElevatedButton.styleFrom(
                         minimumSize: const Size.fromHeight(40.0),
                       ),
                     ),
+                    GoogleSignInButton(),
                     loginLink(),
                   ],
                 ),

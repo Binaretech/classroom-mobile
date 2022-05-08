@@ -1,4 +1,6 @@
-class Token {
+import 'package:classroom_mobile/repository/models/model.dart';
+
+class Token extends Model {
   final String accessToken;
   final String refreshToken;
   final DateTime accessExpires;
@@ -11,5 +13,14 @@ class Token {
       json['accessToken'],
       DateTime.fromMillisecondsSinceEpoch(json['accessExpires']),
     );
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'accessToken': accessToken,
+      'refreshToken': refreshToken,
+      'accessExpires': accessExpires.millisecondsSinceEpoch,
+    };
   }
 }
