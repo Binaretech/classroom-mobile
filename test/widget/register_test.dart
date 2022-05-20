@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:classroom_mobile/bloc/authentication/authentication_bloc.dart';
 import 'package:classroom_mobile/http/request.dart';
-import 'package:classroom_mobile/modules/auth/login.dart';
 import 'package:classroom_mobile/modules/auth/register.dart';
 import 'package:classroom_mobile/repository/auth_repository.dart';
 import 'package:flutter/material.dart';

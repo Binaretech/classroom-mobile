@@ -11,10 +11,10 @@ class PasswordInput extends StatefulWidget {
       : super(key: key);
 
   @override
-  _PasswordInputState createState() => _PasswordInputState();
+  PasswordInputState createState() => PasswordInputState();
 }
 
-class _PasswordInputState extends State<PasswordInput> {
+class PasswordInputState extends State<PasswordInput> {
   bool _obscureText = true;
 
   void _toggleObscureText() {

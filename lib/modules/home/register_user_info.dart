@@ -22,10 +22,10 @@ class RegisterUserInfo extends StatefulWidget {
       : super(key: key);
 
   @override
-  _RegisterUserInfoState createState() => _RegisterUserInfoState();
+  RegisterUserInfoState createState() => RegisterUserInfoState();
 }
 
-class _RegisterUserInfoState extends State<RegisterUserInfo> {
+class RegisterUserInfoState extends State<RegisterUserInfo> {
   final _formKey = GlobalKey<FormState>();
   final RequestData _userData = RequestData();
 
@@ -43,6 +43,8 @@ class _RegisterUserInfoState extends State<RegisterUserInfo> {
       lastname: _userData.lastname!,
       avatar: await _getImageFile(),
     );
+
+    if (!mounted) return;
 
     Navigator.of(context).pop(user);
   }

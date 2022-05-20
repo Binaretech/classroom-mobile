@@ -24,6 +24,7 @@ class Avatar extends StatelessWidget {
       child: CircleAvatar(
         backgroundColor: theme.highlightColor,
         foregroundImage: image?.image,
+        radius: radius,
         child: image == null
             ? Icon(
                 Icons.camera_alt,
@@ -31,7 +32,6 @@ class Avatar extends StatelessWidget {
                 size: iconSize,
               )
             : null,
-        radius: radius,
       ),
     );
   }

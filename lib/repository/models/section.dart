@@ -22,6 +22,7 @@ class Section extends Model {
     );
   }
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       'name': name,

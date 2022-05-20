@@ -1,6 +1,6 @@
 import 'package:classroom_mobile/globals.dart';
 import 'package:classroom_mobile/lang/lang.dart';
-import 'package:intl/intl.dart';
+import 'package:classroom_mobile/utils/helpers.dart';
 
 typedef Rule = String? Function(Lang, String?);
 
@@ -12,7 +12,7 @@ String? Function(String?) rules(List<String? Function(Lang, String?)> fns) {
     for (Rule fn in fns) {
       final result = fn(lang, input);
       if (result != null) {
-        return toBeginningOfSentenceCase(result);
+        return capitalize(result);
       }
     }
 

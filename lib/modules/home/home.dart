@@ -38,9 +38,7 @@ class HomeState extends State<Home> {
   }
 
   void _loadClasses() {
-    widget.classRepository.getSections().then((value) {
-      print(value.data);
-    });
+    widget.classRepository.getSections().then((value) {});
   }
 
   void _loadUser() {

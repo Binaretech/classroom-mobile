@@ -19,10 +19,10 @@ class Register extends StatefulWidget {
   const Register({Key? key, required this.repository}) : super(key: key);
 
   @override
-  _RegisterState createState() => _RegisterState();
+  RegisterState createState() => RegisterState();
 }
 
-class _RegisterState extends State<Register> {
+class RegisterState extends State<Register> {
   final _formKey = GlobalKey<FormState>();
   final RegisterData _registerData = RegisterData();
 
@@ -204,15 +204,15 @@ class _RegisterState extends State<Register> {
                     ),
                     ElevatedButton(
                       onPressed: isLoading ? null : submit,
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size.fromHeight(40.0),
+                      ),
                       child: Text(
                         lang.trans('messages.accept').toUpperCase(),
                         style: const TextStyle(
                           fontWeight: FontWeight.w700,
                           fontSize: 14.0,
                         ),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: const Size.fromHeight(40.0),
                       ),
                     ),
                     GoogleSignInButton(
