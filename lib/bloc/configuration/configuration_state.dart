@@ -4,9 +4,10 @@ class ConfigurationState extends Equatable {
   final Locale locale;
   final ThemeMode themeMode;
 
-  const ConfigurationState(
-      {this.locale = const Locale('es'), this.themeMode = ThemeMode.system});
-
+  ConfigurationState({
+    Locale? locale,
+    this.themeMode = ThemeMode.system,
+  }) : locale = locale ?? Locale(Platform.localeName);
   @override
   List<Object> get props => [locale.languageCode, themeMode];
 }

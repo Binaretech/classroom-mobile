@@ -33,6 +33,7 @@ class Request {
     try {
       final Map<String, String> requestHeaders = {}
         ..addAll(_token != null ? {'Authorization': 'Bearer $_token'} : {})
+        ..addAll({'Content-Type': 'application/json'})
         ..addAll(headers);
 
       final res = await _client.post(formatUri(path),

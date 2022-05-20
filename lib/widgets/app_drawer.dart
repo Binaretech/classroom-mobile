@@ -1,4 +1,5 @@
 import 'package:classroom_mobile/models/user.dart';
+import 'package:classroom_mobile/utils/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:classroom_mobile/bloc/user/user_bloc.dart';
@@ -24,7 +25,7 @@ class AppDrawer extends StatelessWidget {
     return CircleAvatar(
       radius: 30.0,
       foregroundImage: image,
-      child: Text("${user.name[0]}${user.lastname[0]}"),
+      child: Text(unnacent("${user.name[0]}${user.lastname[0]}")),
     );
   }
 
@@ -34,6 +35,10 @@ class AppDrawer extends StatelessWidget {
       child: provider(
         context: context,
         builder: (context, userState) {
+          if (userState is UnLoggedUserState) {
+            return const LinearProgressIndicator();
+          }
+
           final user = (userState as LoggedUserState).user;
 
           return SafeArea(

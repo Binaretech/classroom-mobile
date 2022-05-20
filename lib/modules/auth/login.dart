@@ -21,10 +21,10 @@ class Login extends StatefulWidget {
   const Login({Key? key, required this.repository}) : super(key: key);
 
   @override
-  _LoginState createState() => _LoginState();
+  LoginState createState() => LoginState();
 }
 
-class _LoginState extends State<Login> {
+class LoginState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
   final LoginData _loginData = LoginData();
 
@@ -182,7 +182,7 @@ class _LoginState extends State<Login> {
             children: [
               isLoading ? const LinearProgressIndicator() : Container(),
               Padding(
-                padding: const EdgeInsets.all(20.0),
+                padding: const EdgeInsets.all(40.0),
                 child: Column(
                   children: [
                     AuthTitle(
@@ -202,7 +202,7 @@ class _LoginState extends State<Login> {
                             lang.trans('views.login.forgot_password'),
                             style: TextStyle(
                               fontSize: 12.0,
-                              color: Theme.of(context).primaryColorDark,
+                              color: Theme.of(context).colorScheme.primary,
                             ),
                           ),
                         ],
@@ -210,16 +210,18 @@ class _LoginState extends State<Login> {
                     ),
                     ElevatedButton(
                       onPressed: isLoading ? null : submit(),
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size.fromHeight(40.0),
+                      ),
                       child: Text(
                         lang.trans('messages.accept').toUpperCase(),
                         style: const TextStyle(
                             fontWeight: FontWeight.w700, fontSize: 14.0),
                       ),
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: const Size.fromHeight(40.0),
-                      ),
                     ),
-                    GoogleSignInButton(),
+                    GoogleSignInButton(
+                      authRepository: widget.repository,
+                    ),
                     registerLink(),
                   ],
                 ),

@@ -1,11 +1,13 @@
 import 'package:classroom_mobile/lang/es/es.dart';
+import 'package:classroom_mobile/lang/en/en.dart';
 import 'package:flutter/material.dart';
 
 final _store = {
   'es': es,
+  'en': en,
 };
 
-const allowedLocales = ['es'];
+const allowedLocales = ['es', 'en'];
 
 /// Handles the localization of the app based on the device's locale and the available translations.
 /// The translations are stored in a map, where the key is the locale and the value is the map of translations.
@@ -22,13 +24,15 @@ class Lang {
   /// Returns the translation for the given translation string. If the translation is not found, the string is returned
   String trans(String text,
       {bool capitalize = false, Map<String, String> replace = const {}}) {
-    if (!allowedLocales.contains(locale.languageCode)) {
+    final lang = locale.toLanguageTag();
+
+    if (!allowedLocales.contains(lang)) {
       return text;
     }
 
     final split = text.split('.');
 
-    dynamic message = _store[locale.languageCode];
+    dynamic message = _store[lang];
 
     for (final part in split) {
       if (!(message?.containsKey(part) ?? false)) {

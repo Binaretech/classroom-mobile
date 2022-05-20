@@ -17,10 +17,10 @@ class Home extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _HomeState createState() => _HomeState();
+  HomeState createState() => HomeState();
 }
 
-class _HomeState extends State<Home> {
+class HomeState extends State<Home> {
   bool loading = true;
 
   @override

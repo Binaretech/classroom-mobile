@@ -18,9 +18,6 @@ class AuthRepository extends Repository {
         'email': email,
         'password': password,
       }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
     );
 
     if (hasResponseErrors(response)) {
@@ -41,9 +38,19 @@ class AuthRepository extends Repository {
         'email': email,
         'password': password,
       }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
+    );
+
+    if (hasResponseErrors(response)) {
+      throw Exception(response);
+    }
+
+    return AuthResponse.fromJson(response.data);
+  }
+
+  Future<AuthResponse> googleSignIn({required String idToken}) async {
+    final response = await _client.post(
+      '/auth/google',
+      body: jsonEncode({'idToken': idToken}),
     );
 
     if (hasResponseErrors(response)) {

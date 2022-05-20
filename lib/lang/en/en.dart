@@ -3,7 +3,7 @@ part 'views.dart';
 part 'messages.dart';
 part 'validation.dart';
 
-final Map<String, dynamic> es = {
+final Map<String, dynamic> en = {
   'attributes': _attributes,
   'views': _views,
   'messages': _messages,

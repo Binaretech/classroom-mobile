@@ -188,7 +188,7 @@ class _RegisterState extends State<Register> {
             children: [
               isLoading ? const LinearProgressIndicator() : Container(),
               Padding(
-                padding: const EdgeInsets.all(20.0),
+                padding: const EdgeInsets.all(40.0),
                 child: Column(
                   children: [
                     AuthTitle(
@@ -215,7 +215,9 @@ class _RegisterState extends State<Register> {
                         minimumSize: const Size.fromHeight(40.0),
                       ),
                     ),
-                    GoogleSignInButton(),
+                    GoogleSignInButton(
+                      authRepository: widget.repository,
+                    ),
                     loginLink(),
                   ],
                 ),
