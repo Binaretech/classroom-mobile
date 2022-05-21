@@ -24,7 +24,7 @@ class Lang {
   /// Returns the translation for the given translation string. If the translation is not found, the string is returned
   String trans(String text,
       {bool capitalize = false, Map<String, String> replace = const {}}) {
-    final lang = locale.toLanguageTag();
+    final lang = locale.languageCode;
 
     if (!allowedLocales.contains(lang)) {
       return text;

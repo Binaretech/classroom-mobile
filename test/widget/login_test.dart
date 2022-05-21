@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:classroom_mobile/bloc/authentication/authentication_bloc.dart';
 import 'package:classroom_mobile/http/request.dart';
+import 'package:classroom_mobile/lang/lang.dart';
 import 'package:classroom_mobile/modules/auth/login.dart';
 import 'package:classroom_mobile/repository/auth_repository.dart';
 import 'package:flutter/material.dart';
@@ -52,6 +53,7 @@ void main() {
     await tester.enterText(find.byType(TextFormField).first, 'test@mail.com');
     await tester.enterText(find.byType(TextFormField).last, 'test');
 
-    await tester.tap(find.byType(ElevatedButton));
+    await tester.tap(find
+        .text(Lang(const Locale('en')).trans('messages.accept').toUpperCase()));
   });
 }

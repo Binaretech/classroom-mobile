@@ -23,9 +23,7 @@ void main() {
       final loginData = {'email': 'test@mail.com', 'password': 'test'};
 
       when(client.post('/auth/login',
-              headers: {'Content-Type': 'application/json'},
-              body: jsonEncode(loginData),
-              encoding: null))
+              body: jsonEncode(loginData), encoding: null))
           .thenAnswer((_) async => Response(200, responseData));
 
       final repository = AuthRepository(client: client);
