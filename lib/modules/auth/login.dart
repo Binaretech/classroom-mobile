@@ -18,6 +18,8 @@ class LoginData {
 class Login extends StatefulWidget {
   final AuthRepository repository;
 
+  static const route = '/login';
+
   const Login({Key? key, required this.repository}) : super(key: key);
 
   @override

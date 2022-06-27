@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:classroom_mobile/http/request.dart';
-import 'package:classroom_mobile/repository/models/user.dart';
+import 'package:classroom_mobile/repository/resources/user.dart';
 import 'package:classroom_mobile/repository/repository.dart';
 
 class AuthRepository extends Repository {

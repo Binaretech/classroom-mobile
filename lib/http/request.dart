@@ -43,7 +43,9 @@ class Request {
 
       return Response(res.statusCode, json.decode(utf8.decode(res.bodyBytes)));
     } catch (e) {
-      throw Response(0, {});
+      throw Response(0, {
+        'error': e,
+      });
     }
   }
 
@@ -52,13 +54,15 @@ class Request {
     String path, {
     Map<String, String> headers = const {},
     Encoding? encoding,
+    Map<String, String>? queryParameters,
   }) async {
     try {
       final Map<String, String> requestHeaders = {}
         ..addAll(_token != null ? {'Authorization': 'Bearer $_token'} : {})
         ..addAll(headers);
 
-      final res = await _client.get(formatUri(path), headers: requestHeaders);
+      final res = await _client.get(formatUri(path, queryParameters),
+          headers: requestHeaders);
 
       return Response(
           res.statusCode,
@@ -66,7 +70,9 @@ class Request {
               ? json.decode(utf8.decode(res.bodyBytes))
               : {});
     } catch (e) {
-      throw Response(0, {});
+      throw Response(0, {
+        'error': e,
+      });
     }
   }
 
@@ -128,8 +134,8 @@ class MultipartRequest {
   }
 }
 
-Uri formatUri(String path) {
+Uri formatUri(String path, [Map<String, String>? queryParameters]) {
   return Config.useHttps
-      ? Uri.https(Config.domain, path)
-      : Uri.http(Config.domain, path);
+      ? Uri.https(Config.domain, path, queryParameters)
+      : Uri.http(Config.domain, path, queryParameters);
 }

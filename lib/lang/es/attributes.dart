@@ -7,4 +7,6 @@ final _attributes = {
   'avatar': 'avatar',
   'password': 'contraseña',
   'password_confirm': 'confirmar contraseña',
+  'student': 'estudiante|estudiantes',
+  'teacher': 'profesor',
 };

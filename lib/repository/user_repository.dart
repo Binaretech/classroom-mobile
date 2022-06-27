@@ -113,17 +113,17 @@ class UserResponse extends User {
 
     final profileImage = user['profileImage'] != null
         ? File(
-            id: user['profileImage']['ID'],
+            id: user['profileImage']['id'],
             key: user['profileImage']['key'],
             type: user['profileImage']['type'],
             bucket: user['profileImage']['bucket'],
             mimeType: user['profileImage']['mimeTYpe'],
             fileableType: user['profileImage']['fileableType'],
-            fileableID: user['profileImage']['fileableID'])
+            fileableId: user['profileImage']['fileableId'])
         : null;
 
     return UserResponse(
-      id: user['ID'],
+      id: user['id'],
       name: user['name'],
       lastname: user['lastname'],
       profileImage: profileImage,

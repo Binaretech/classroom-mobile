@@ -1,4 +1,4 @@
-import 'package:classroom_mobile/widgets/app_drawer.dart';
+import 'package:classroom_mobile/widgets/drawer/app_drawer.dart';
 import 'package:flutter/material.dart';
 
 class AppScaffold extends StatelessWidget {

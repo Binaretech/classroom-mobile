@@ -1,3 +1,4 @@
+import 'package:classroom_mobile/bloc/section/section_bloc.dart';
 import 'package:classroom_mobile/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,12 +45,13 @@ class AppBlocBuilder extends StatelessWidget {
   List<BlocProvider> _blocProviders() {
     return [
       BlocProvider<AuthenticationBloc>(
-        create: (_) => AuthenticationBloc(token: token),
+        create: (_) => AuthenticationBloc(token: token ?? ''),
       ),
       BlocProvider<ConfigurationBloc>(create: (_) => ConfigurationBloc()),
       BlocProvider<UserBloc>(
         create: (_) => UserBloc(user: user),
       ),
+      BlocProvider<SectionBloc>(create: (_) => SectionBloc()),
     ];
   }
 

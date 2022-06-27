@@ -8,10 +8,11 @@ part 'authentication_state.dart';
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
-  AuthenticationBloc({String? token})
-      : super(AuthenticationState(token: token ?? '')) {
-    if (token?.isNotEmpty ?? false) {
+  AuthenticationBloc({String token = ''})
+      : super(AuthenticationState(token: token)) {
+    if (token.isNotEmpty) {
       Request.setToken(token);
+      MultipartRequest.setToken(token);
     }
 
     on<AuthenticateUser>(

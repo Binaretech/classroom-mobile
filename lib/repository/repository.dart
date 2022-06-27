@@ -5,8 +5,6 @@ import 'package:classroom_mobile/http/request.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class PaginatedResponse<T> {}
-
 abstract class Repository {
   /// Check if the response status is not 200 OK.
   /// if there is an error message, it is shown to the user with a snackbar.
@@ -20,7 +18,7 @@ abstract class Repository {
     }
 
     snackbarKey.currentState?.showSnackBar(SnackBar(
-      content: Text(extractErrorFromResponse(response)),
+      content: Text(extractErrorFromResponse(response.data)),
       duration: const Duration(seconds: 3),
     ));
 
@@ -48,18 +46,22 @@ abstract class Repository {
   }
 
   /// Extracts the error message from the response.
-  String extractErrorFromResponse(Response response) {
-    if (response.data.containsKey('validationErrors')) {
+  String extractErrorFromResponse(Map<String, dynamic> data) {
+    if (data.containsKey('validationErrors')) {
       return extractValidationErrors(
-          response.data['validationErrors'] as Map<String, dynamic>);
+          data['validationErrors'] as Map<String, dynamic>);
     }
 
-    if (response.data.containsKey('message')) {
-      return response.data['message'] as String;
+    if (data.containsKey('message') && data['message'] is String) {
+      return data['message'];
     }
 
-    if (response.data.containsKey('error')) {
-      return response.data['error'];
+    if (data.containsKey('message')) {
+      return extractErrorFromResponse(data['message']);
+    }
+
+    if (data.containsKey('error')) {
+      return data['error'];
     }
 
     return 'Unknown error';

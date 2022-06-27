@@ -1,4 +1,4 @@
-import 'package:classroom_mobile/repository/models/model.dart';
+import 'package:classroom_mobile/repository/resources/model.dart';
 
 class Token extends Model {
   final String accessToken;

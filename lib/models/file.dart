@@ -7,7 +7,7 @@ class File extends Equatable {
   final String bucket;
   final String mimeType;
   final String fileableType;
-  final String fileableID;
+  final String fileableId;
 
   const File({
     required this.id,
@@ -16,7 +16,7 @@ class File extends Equatable {
     required this.bucket,
     required this.mimeType,
     required this.fileableType,
-    required this.fileableID,
+    required this.fileableId,
   });
 
   File.fromMap(Map<String, dynamic> data)
@@ -26,13 +26,13 @@ class File extends Equatable {
         bucket = data['bucket'] as String,
         mimeType = data['mimeType'] as String,
         fileableType = data['fileableType'] as String,
-        fileableID = data['fileableID'] as String;
+        fileableId = data['fileableId'] as String;
 
   String get url => "http://localhost:9000/$bucket/$key";
 
   @override
   List<Object> get props =>
-      [id, key, type, bucket, mimeType, fileableType, fileableID];
+      [id, key, type, bucket, mimeType, fileableType, fileableId];
 
   Map<String, Object> toMap() {
     return {
@@ -42,7 +42,7 @@ class File extends Equatable {
       'bucket': bucket,
       'mimeType': mimeType,
       'fileableType': fileableType,
-      'fileableID': fileableID,
+      'fileableId': fileableId,
     };
   }
 }

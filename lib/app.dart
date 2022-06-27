@@ -6,9 +6,9 @@ import 'package:classroom_mobile/modules/auth/login.dart';
 import 'package:classroom_mobile/modules/auth/register.dart';
 import 'package:classroom_mobile/modules/home/home.dart';
 import 'package:classroom_mobile/repository/auth_repository.dart';
-import 'package:classroom_mobile/repository/class_repository.dart';
 import 'package:classroom_mobile/repository/user_repository.dart';
-import 'package:classroom_mobile/widgets/locale_listener.dart';
+import 'package:classroom_mobile/routes.dart';
+import 'package:classroom_mobile/widgets/app_bloc_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -44,20 +44,16 @@ class App extends StatelessWidget {
       ),
       darkTheme: ThemeData.dark(),
       themeMode: config.themeMode,
-      initialRoute: auth.isAutheticated ? '/' : '/login',
-      routes: {
-        '/': (_) => Home(
-              userRepository: UserRepository(),
-              classRepository: ClassRepository(),
-            ),
-        '/login': (_) => Login(repository: AuthRepository()),
-        '/register': (_) => Register(repository: AuthRepository()),
-      },
+      initialRoute: auth.isAutheticated ? Home.route : Login.route,
+      routes: routes,
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return AppBlocBuilder(builder: _buildApp);
+    return AppBlocBuilder(
+      builder: _buildApp,
+      token: token,
+    );
   }
 }

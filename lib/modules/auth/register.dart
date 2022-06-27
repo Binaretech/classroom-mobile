@@ -16,6 +16,9 @@ class RegisterData {
 /// Register screen for new users to create an account on the app.
 class Register extends StatefulWidget {
   final AuthRepository repository;
+
+  static const route = '/register';
+
   const Register({Key? key, required this.repository}) : super(key: key);
 
   @override
