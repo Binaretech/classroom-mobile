@@ -9,4 +9,7 @@ final _attributes = {
   'password_confirm': 'confirmar contraseña',
   'student': 'estudiante|estudiantes',
   'teacher': 'profesor',
+  'members': 'miembros',
+  'announcements': 'anuncios',
+  'assignments': 'tareas',
 };

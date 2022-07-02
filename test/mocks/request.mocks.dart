@@ -2,50 +2,49 @@
 // in classroom_mobile/test/login_test.dart.
 // Do not manually edit this file.
 
-import 'dart:async' as _i3;
-import 'dart:convert' as _i4;
+import 'dart:async';
+import 'dart:convert';
 
-import 'package:classroom_mobile/http/request.dart' as _i2;
-import 'package:mockito/mockito.dart' as _i1;
+import 'package:classroom_mobile/http/request.dart';
+import 'package:mockito/mockito.dart';
 
-// ignore_for_file: type=lint
-// ignore_for_file: avoid_redundant_argument_values
-// ignore_for_file: avoid_setters_without_getters
-// ignore_for_file: comment_references
-// ignore_for_file: implementation_imports
-// ignore_for_file: invalid_use_of_visible_for_testing_member
-// ignore_for_file: prefer_const_constructors
-// ignore_for_file: unnecessary_parenthesis
-// ignore_for_file: camel_case_types
-
-class _FakeResponse_0 extends _i1.Fake implements _i2.Response {}
+class FakeResponse extends Fake implements Response {}
 
 /// A class which mocks [Request].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockRequest extends _i1.Mock implements _i2.Request {
+class MockRequest extends Mock implements Request {
   MockRequest() {
-    _i1.throwOnMissingStub(this);
+    throwOnMissingStub(this);
   }
 
   @override
-  _i3.Future<_i2.Response> post(String? path,
+  Future<Response> post(String? path,
           {Map<String, String>? headers = const {},
           Object? body,
-          _i4.Encoding? encoding}) =>
+          Encoding? encoding}) =>
       (super.noSuchMethod(
               Invocation.method(#post, [path],
                   {#headers: headers, #body: body, #encoding: encoding}),
-              returnValue: Future<_i2.Response>.value(_FakeResponse_0()))
-          as _i3.Future<_i2.Response>);
+              returnValue: Future<Response>.value(FakeResponse()))
+          as Future<Response>);
   @override
-  _i3.Future<_i2.Response> get(String? path,
-          {Map<String, String>? headers = const {}, _i4.Encoding? encoding}) =>
+  Future<Response> get(
+    String? path, {
+    Map<String, String>? headers = const {},
+    Encoding? encoding,
+    Map<String, String>? queryParameters,
+  }) =>
       (super.noSuchMethod(
-              Invocation.method(
-                  #get, [path], {#headers: headers, #encoding: encoding}),
-              returnValue: Future<_i2.Response>.value(_FakeResponse_0()))
-          as _i3.Future<_i2.Response>);
+              Invocation.method(#get, [
+                path
+              ], {
+                #headers: headers,
+                #encoding: encoding,
+                #queryParameters: queryParameters
+              }),
+              returnValue: Future<Response>.value(FakeResponse()))
+          as Future<Response>);
   @override
   void close() => super.noSuchMethod(Invocation.method(#close, []),
       returnValueForMissingStub: null);

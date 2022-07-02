@@ -12,21 +12,23 @@ class _SectionBottomNavigation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final lang = Lang.of(context);
+
     return BottomNavigationBar(
       currentIndex: currentIndex,
       onTap: onTabTapped,
-      items: const [
+      items: [
         BottomNavigationBarItem(
-          icon: Icon(Icons.announcement),
-          label: 'Announcements',
+          icon: const Icon(Icons.announcement),
+          label: lang.trans('attributes.announcements', capitalize: true),
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.assignment),
-          label: 'Assignments',
+          icon: const Icon(Icons.assignment),
+          label: lang.trans('attributes.assignments', capitalize: true),
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.people),
-          label: 'Students',
+          icon: const Icon(Icons.people),
+          label: lang.trans('attributes.members', capitalize: true),
         ),
       ],
     );

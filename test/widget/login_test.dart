@@ -10,10 +10,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:mockito/annotations.dart';
 
 import '../app_wrapper.dart';
 import '../mocks/request.mocks.dart';
 
+@GenerateMocks([Request])
 void main() {
   setUp(() async {
     await dotenv.load();
