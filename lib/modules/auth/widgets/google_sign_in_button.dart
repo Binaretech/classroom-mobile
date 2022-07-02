@@ -1,6 +1,5 @@
 import 'package:classroom_mobile/bloc/authentication/authentication_bloc.dart';
 import 'package:classroom_mobile/config/config.dart';
-import 'package:classroom_mobile/models/user.dart';
 import 'package:classroom_mobile/repository/auth_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:classroom_mobile/lang/lang.dart';
